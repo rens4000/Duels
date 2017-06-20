@@ -49,5 +49,13 @@ public class Arena {
 	public ArrayList<UUID> getPlayers() {
 		return players;
 	}
+	
+	public void start() {
+		
+	}
+	
+	public void stop() {
+		
+	}
 
 }
