@@ -6,13 +6,11 @@ import java.util.UUID;
 public class Arena {
 	
 	private String name;
-	private int id;
 	private int minPlayers;
 	private int maxPlayers;
 	private ArrayList<UUID> players = new ArrayList<>();
 	
-	public Arena(String name, int id, int minPlayers, int maxPlayers) {
-		this.id = id;
+	public Arena(String name, int minPlayers, int maxPlayers) {
 		this.name = name;
 		this.minPlayers = minPlayers;
 		this.maxPlayers = maxPlayers;
@@ -42,10 +40,6 @@ public class Arena {
 		this.maxPlayers = maxPlayers;
 	}
 
-	public int getId() {
-		return id;
-	}
-
 	public ArrayList<UUID> getPlayers() {
 		return players;
 	}
@@ -57,5 +51,4 @@ public class Arena {
 	public void stop() {
 		
 	}
-
 }
