@@ -2,10 +2,12 @@ package nl.dutchcodinggroup.duels;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.md_5.bungee.api.ChatColor;
 import nl.dutchcodinggroup.duels.utils.ConfigManager;
+import nl.mistermel.quickcraft.utils.ArenaManager;
 
 public class Main extends JavaPlugin {
 	
@@ -52,6 +54,32 @@ public class Main extends JavaPlugin {
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "/duels " + ChatColor.GRAY + " - Main command for the duels plugin.");
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "/duels help" + ChatColor.GRAY + " - Shows this message.");
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "/duels create <Name>" + ChatColor.GRAY + " - Creates an arena.");
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("setspawn")) {
+				if(!sender.hasPermission("quickcraft.admin")) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
+					return true;
+				}
+				if(args.length == 1) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /qc setspawn <Name>");
+					return true;
+				}
+				if(!ArenaManager.exists(args[1])) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "That arena does not exist!");
+					return true;
+				}
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
+					return true;
+				}
+				if(ArenaManager.isEnabled(args[1])) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This arena is currently enabled. To make changes, please disable it first.");
+					return true;
+				}
+				Player p = (Player) sender;
+				ArenaManager.setSpawn(args[1], p.getLocation());
+				sender.sendMessage(PREFIX + ChatColor.GOLD + "Spawn set!");
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("create")) {
