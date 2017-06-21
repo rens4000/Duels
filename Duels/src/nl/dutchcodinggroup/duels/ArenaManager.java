@@ -20,7 +20,7 @@ public class ArenaManager {
 	}
 	
 	public void createArena(String name) {
-		arenas.put(name, new Arena(name, 2, 2));
+		arenas.put(name, new Arena(name, null, null));
 	}
 	
 	public Arena getArena(String name) {
@@ -29,14 +29,13 @@ public class ArenaManager {
 	
 	public void load() {
 		for(String name : data.getConfigurationSection("arenas").getKeys(false)) {
-			//TODO: Laad shit
-			arenas.put(name, new Arena(name, 2, 2));
+			arenas.put(name, new Arena(name, null, null));
 		}
 	}
 	
 	public void save() {
 		for(Arena arena : arenas.values()) {
-			//TODO: Save shit
+			String name = arena.getName();
 		}
 		arenas.clear();
 		configManager.save();
