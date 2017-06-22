@@ -56,7 +56,7 @@ public class Main extends JavaPlugin {
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "/duels create <Name>" + ChatColor.GRAY + " - Creates an arena.");
 				return true;
 			}
-			if(args[0].equalsIgnoreCase("setspawn")) {
+			if(args[0].equalsIgnoreCase("setspawn1")) {
 				if(!sender.hasPermission("quickcraft.admin")) {
 					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
 					return true;
@@ -73,13 +73,40 @@ public class Main extends JavaPlugin {
 					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
 					return true;
 				}
-				if(ArenaManager.isEnabled(args[1])) {
+				if(ArenaManager.getArena(args[1]).isEnabled()) {
 					sender.sendMessage(PREFIX + ChatColor.RED + "This arena is currently enabled. To make changes, please disable it first.");
 					return true;
 				}
 				Player p = (Player) sender;
-				ArenaManager.setSpawn(args[1], p.getLocation());
-				sender.sendMessage(PREFIX + ChatColor.GOLD + "Spawn set!");
+				ArenaManager.setSpawn1(args[1], p.getLocation());
+				sender.sendMessage(PREFIX + ChatColor.GOLD + "Spawn1 set!");
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("setspawn2")) {
+				if(!sender.hasPermission("quickcraft.admin")) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
+					return true;
+				}
+				if(args.length == 1) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /qc setspawn <Name>");
+					return true;
+				}
+				if(!ArenaManager.exists(args[1])) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "That arena does not exist!");
+					return true;
+				}
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
+					return true;
+				}
+				if(ArenaManager.getArena(args[1]).isEnabled()) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This arena is currently enabled. To make changes, please disable it first.");
+					return true;
+				}
+				Player p = (Player) sender;
+				ArenaManager.setSpawn2(args[1], p.getLocation());
+				sender.sendMessage(PREFIX + ChatColor.GOLD + "Spawn2 set!");
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("create")) {

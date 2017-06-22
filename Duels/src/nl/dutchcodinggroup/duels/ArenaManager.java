@@ -16,7 +16,7 @@ public class ArenaManager {
 	
 	private static Map<String, Arena> arenas = new HashMap<String, Arena>();
 	
-	private ConfigManager configManager;
+	private static ConfigManager configManager;
 	private static FileConfiguration data;
 	
 	public ArenaManager() {
@@ -39,10 +39,17 @@ public class ArenaManager {
 		Main.getConfigManager().save();
 	}
 	
-	public static void setSpawn(String name, Location loc) {
-		arenas.get(name).setSpawnLocation(loc);
+	public static void setSpawn1(String name, Location loc) {
+		arenas.get(name).setSpawn1(loc);
 		save();
 	}
+	
+	public static void setSpawn2(String name, Location loc) {
+		arenas.get(name).setSpawn1(loc);
+		save();
+	}
+	
+	
 	
 	public static Arena getArena(Player p) {
 		for(Arena arena : arenas.values()) {
@@ -53,7 +60,7 @@ public class ArenaManager {
 		return null;
 	}
 	
-	public Arena getArena(String name) {
+	public static Arena getArena(String name) {
 		return arenas.get(name);
 	}
 	
@@ -63,11 +70,32 @@ public class ArenaManager {
 		}
 	}
 	
-	public void save() {
+	public static void save() {
 		for(Arena arena : arenas.values()) {
 			String name = arena.getName();
+			if(arena.getSpawn1() != null) {
+				data.set("arenas." + name + ".spawn1.world", arena.getSpawn1().getWorld().getName());
+				data.set("arenas." + name + ".spawn1.x", arena.getSpawn1().getX());
+				data.set("arenas." + name + ".spawn1.y", arena.getSpawn1().getY());
+				data.set("arenas." + name + ".spawn1.z", arena.getSpawn1().getZ());
+			}
+			if(arena.getSpawn2() != null) {
+				data.set("arenas." + name + ".spawn2.world", arena.getSpawn2().getWorld().getName());
+				data.set("arenas." + name + ".spawn2.x", arena.getSpawn2().getX());
+				data.set("arenas." + name + ".spawn2.y", arena.getSpawn2().getY());
+				data.set("arenas." + name + ".spawn2.z", arena.getSpawn2().getZ());
+			}
+			data.set("arenas." + name + ".enabled", arena.isEnabled());
+			
 		}
 		arenas.clear();
 		configManager.save();
+	}
+
+	public static boolean exists(String string) {
+		for(Arena a : arenas.values()) {
+			if(a.getName() == string) return true;
+		}
+		return false;
 	}	
 }
