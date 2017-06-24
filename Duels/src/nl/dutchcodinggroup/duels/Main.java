@@ -1,13 +1,12 @@
 package nl.dutchcodinggroup.duels;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.md_5.bungee.api.ChatColor;
 import nl.dutchcodinggroup.duels.utils.ConfigManager;
-import nl.mistermel.quickcraft.utils.ArenaManager;
 
 public class Main extends JavaPlugin {
 	
@@ -25,6 +24,7 @@ public class Main extends JavaPlugin {
 		configManager = new ConfigManager();
 		arenaManager = new ArenaManager();
 		
+		arenaManager.refreshConfig();
 		arenaManager.load();
 	}
 	
@@ -57,12 +57,12 @@ public class Main extends JavaPlugin {
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("setspawn1")) {
-				if(!sender.hasPermission("quickcraft.admin")) {
+				if(!sender.hasPermission("duels.admin")) {
 					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
 					return true;
 				}
 				if(args.length == 1) {
-					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /qc setspawn <Name>");
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /duels setspawn1 <Name>");
 					return true;
 				}
 				if(!ArenaManager.exists(args[1])) {
@@ -84,12 +84,12 @@ public class Main extends JavaPlugin {
 			}
 			
 			if(args[0].equalsIgnoreCase("setspawn2")) {
-				if(!sender.hasPermission("quickcraft.admin")) {
+				if(!sender.hasPermission("duels.admin")) {
 					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
 					return true;
 				}
 				if(args.length == 1) {
-					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /qc setspawn <Name>");
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /duels setspawn2 <Name>");
 					return true;
 				}
 				if(!ArenaManager.exists(args[1])) {
@@ -107,6 +107,96 @@ public class Main extends JavaPlugin {
 				Player p = (Player) sender;
 				ArenaManager.setSpawn2(args[1], p.getLocation());
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "Spawn2 set!");
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("toggle")) {
+				if(!sender.hasPermission("duels.admin")) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
+					return true;
+				}
+				if(args.length == 1) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /duels toggle <Name>");
+					return true;
+				}
+				if(!ArenaManager.exists(args[1])) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "That arena does not exist!");
+					return true;
+				}
+				boolean toggled = ArenaManager.getArena(args[1]).isEnabled();
+				if(toggled) {
+					ArenaManager.setEnabled(args[1], false);
+					sender.sendMessage(PREFIX + ChatColor.GOLD + "Arena disabled.");
+				} else {
+					if(!ArenaManager.isCompleted(args[1])) {
+						sender.sendMessage(PREFIX + ChatColor.RED + "This arena isnt completed yet!");
+						return true;
+					}
+					if(ArenaManager.getMainSpawn() == null) {
+						sender.sendMessage(PREFIX + ChatColor.RED + "There isn't a mainspawn!");
+						return true;
+					}
+					ArenaManager.setEnabled(args[1], true);
+					sender.sendMessage(PREFIX + ChatColor.GOLD + "Arena enabled.");
+				}
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("reload")) {
+				if(!sender.hasPermission("duels.admin")) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
+					return true;
+				}
+				ArenaManager.refreshConfig();
+				sender.sendMessage(PREFIX + ChatColor.GOLD + "Plugin reloaded.");
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("setmainspawn")) {
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
+					return true;
+				}
+				Player p = (Player) sender;
+				if(!p.hasPermission("duels.admin")) {
+					p.sendMessage(PREFIX + ChatColor.RED + "You dont have permission to use this command!");
+					return true;
+				}
+				ArenaManager.setMainSpawn(p);
+			}
+			if(args[0].equalsIgnoreCase("join")) {
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
+					return true;
+				}
+				Player p = (Player) sender;
+				if(args.length == 1) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "Use: /duels join <Name>");
+					return true;
+				}
+				if(!ArenaManager.exists(args[1])) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "That arena does not exist!");
+					return true;
+				}
+				if(ArenaManager.isInGame(p)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You are already in a game!");
+					return true;
+				}
+				if(!ArenaManager.join(args[1], p)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This game is currently not joinable.");
+				} else {
+					sender.sendMessage(PREFIX + ChatColor.GOLD + "Joined game!");
+				}
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("leave")) {
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "This command can only be used as a player!");
+					return true;
+				}
+				Player p = (Player) sender;
+				if(!ArenaManager.isInGame(p)) {
+					sender.sendMessage(PREFIX + ChatColor.RED + "You aren't in a game!");
+					return true;
+				}
+				ArenaManager.getArena(p).leave(p);
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("create")) {

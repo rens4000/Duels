@@ -27,10 +27,11 @@ public class Arena {
 	private boolean enabled;
 	private static ArrayList<UUID> players = new ArrayList<>();
 	
-	public Arena(String name, Location loc1, Location loc2) {
+	public Arena(String name, Location loc1, Location loc2, boolean enabled) {
 		this.name = name;
 		this.loc1 = loc1;
 		this.loc2 = loc2;
+		this.enabled = enabled;
 		
 		this.state = GameState.WAITING;
 	}
@@ -58,8 +59,12 @@ public class Arena {
 			return false;
 		if (!enabled)
 			return false;
-		players.add(p.getUniqueId());
+		if(players.size() == 2)
+			return false;
 		
+		players.add(p.getUniqueId());
+		sendMessage(Main.PREFIX + p.getName() + " has joined the arena! (" + ChatColor.AQUA + players.size() + ChatColor.WHITE + "/" + ChatColor.AQUA + "2" + ChatColor.RESET + ")");
+
 		for(UUID pl : players) {
 			Player player = Bukkit.getPlayer(pl);
 			if(!spawnedLoc1) {
@@ -172,12 +177,33 @@ public class Arena {
 		return false;
 	}
 	
-	public void stop() {
-		
+	public void stop(Player k, Player p) {
+		sendMessage(Main.PREFIX + k.getName() + " has killed " + p.getName() + ", so " + k.getName() + " has won the game!");
+		sendTitle(ChatColor.AQUA + k.getName() + " won the game!", "");
+		k.teleport(ArenaManager.getMainSpawn());
+		reset();
+	}
+
+	private void reset() {
+		state = GameState.RESETTING;
+		players.removeAll(players);
+		//private boolean spawnedLoc1;
+		//private static boolean pvp = false;
+		pvp = false;
+		spawnedLoc1 = false;
 	}
 
 	public boolean isEnabled() {
 		if(enabled) return true;
 		return false;
+	}
+
+	public void leave(Player p) {
+		if(!players.contains(p.getUniqueId())) {
+			p.sendMessage(Main.ERROR + "Je zit niet in een arena!");
+			return;
+		}
+		players.remove(p.getUniqueId());
+		sendMessage(Main.PREFIX + p.getName() + " has left the arena! (" + ChatColor.AQUA + players.size() + ChatColor.WHITE + "/" + ChatColor.AQUA + "2" + ChatColor.RESET + ")");
 	}
 }
