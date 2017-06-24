@@ -36,7 +36,7 @@ public class ArenaManager {
 			p.sendMessage(Main.PREFIX + ChatColor.RED + "This arena has been disabled by a admin.");
 			arena.leave(p);
 		}
-		Main.getConfigManager().save();
+		Main.getConfigManager().save(Main.getConfigManager().getDataFile());
 	}
 	
 	public static void setMainSpawn(Player p) {
@@ -92,6 +92,7 @@ public class ArenaManager {
 	}
 	
 	public static void save() {
+		try {
 		for(Arena arena : arenas.values()) {
 			String name = arena.getName();
 			if(arena.getSpawn1() != null) {
@@ -110,7 +111,10 @@ public class ArenaManager {
 			
 		}
 		arenas.clear();
-		configManager.save();
+		configManager.save(Main.getConfigManager().getDataFile());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean exists(String string) {

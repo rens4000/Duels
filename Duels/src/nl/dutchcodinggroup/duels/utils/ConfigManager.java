@@ -22,7 +22,7 @@ public class ConfigManager {
 		data = YamlConfiguration.loadConfiguration(dataFile);
 	}
 	
-	public void save() {
+	public void save(FileConfiguration fileConfiguration) {
 		try {
 			data.save(dataFile);
 		} catch (IOException e) {

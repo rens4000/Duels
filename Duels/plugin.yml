@@ -1,0 +1,7 @@
+name: Duels
+main: nl.dutchcodinggroup.duels.Main
+version: 1.0
+authors: [rens4000, MisterMel]
+commands:
+  Duels:
+    description: The main duels command

@@ -1,5 +1,6 @@
 package nl.dutchcodinggroup.duels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,7 @@ public class Main extends JavaPlugin {
 		
 		arenaManager.refreshConfig();
 		arenaManager.load();
+		Bukkit.getPluginManager().registerEvents(new Events(), this);
 	}
 	
 	@Override
@@ -44,7 +46,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("duels")) {
-			if(args.length == 1) {
+			if(args.length == 0) {
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "Duels");
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "Made by " + ChatColor.DARK_AQUA + "rens4000" + ChatColor.GOLD + " & " + ChatColor.GOLD + "MisterMel");
 				sender.sendMessage(PREFIX + ChatColor.GOLD + "Use /duels help for command help.");

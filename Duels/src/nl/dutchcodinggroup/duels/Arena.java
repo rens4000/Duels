@@ -180,6 +180,9 @@ public class Arena {
 	public void stop(Player k, Player p) {
 		sendMessage(Main.PREFIX + k.getName() + " has killed " + p.getName() + ", so " + k.getName() + " has won the game!");
 		sendTitle(ChatColor.AQUA + k.getName() + " won the game!", "");
+		for(UUID u : players) {
+			Bukkit.getPlayer(u).getInventory().clear();
+		}
 		k.teleport(ArenaManager.getMainSpawn());
 		reset();
 	}
@@ -191,6 +194,7 @@ public class Arena {
 		//private static boolean pvp = false;
 		pvp = false;
 		spawnedLoc1 = false;
+		state = GameState.WAITING;
 	}
 
 	public boolean isEnabled() {

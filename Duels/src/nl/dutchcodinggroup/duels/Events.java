@@ -25,6 +25,7 @@ public class Events implements Listener {
 			Player p = e.getEntity();
 			if(!ArenaManager.isInGame(p)) return;
 			Player k = p.getKiller();
+			p.spigot().respawn();
 			ArenaManager.getArena(p).stop(k, p);	
 		}
 	}
