@@ -12,14 +12,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import nl.dutchcodinggroup.duels.utils.GameState;
 
 public class Arena {
 	
 	private String name;
-	private GameState state;
+	private static GameState state;
 	private Location loc1;
 	private Location loc2;
 	private boolean spawnedLoc1;
@@ -46,7 +45,7 @@ public class Arena {
 	public static void sendTitle(String message, String Sub) {
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
-			p.sendTitle(message, Sub);
+			p.sendTitle(message, Sub, 5, 20, 10);
 		}
 	}
 	
@@ -92,7 +91,7 @@ public class Arena {
 	static int i;
     public static void StartCountdown() {
         i = 300;
-        BukkitTask task = new BukkitRunnable() {
+        new BukkitRunnable() {
         	int count = 10;
         	public void run() {
         		count--;
@@ -141,7 +140,7 @@ public class Arena {
 
 	public List<Player> getPlayers() {
 		List<Player> players = new ArrayList<Player>();
-		for(UUID u : this.players) {
+		for(UUID u : Arena.players) {
 			players.add(Bukkit.getPlayer(u));
 		}
 		return players;

@@ -51,7 +51,6 @@ public class ArenaManager {
 	public static Location getMainSpawn() {
 		Location loc = new Location(Bukkit.getWorld(data.get("main.spawnlocation.world").toString()), (int) data.get("main.spawnlocation.x"),
 				(int) data.get("main.spawnlocation.y"), (int) data.get("main.spawnlocation.z"));
-		if(loc == null) return null;
 		return loc;
 	}
 	
