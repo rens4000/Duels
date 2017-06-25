@@ -118,10 +118,7 @@ public class ArenaManager {
 	}
 
 	public static boolean exists(String string) {
-		for(Arena a : arenas.values()) {
-			if(a.getName() == string) return true;
-		}
-		return false;
+		return arenas.containsKey(string);
 	}
 
 	public static boolean isInGame(Player p) {
@@ -138,7 +135,7 @@ public class ArenaManager {
 		return arena.join(p);
 	}
 
-	public static void refreshConfig() {
+	public void refreshConfig() {
 		save();
 		for(Arena arena : arenas.values()) {
 			for(Player p : arena.getPlayers()) {

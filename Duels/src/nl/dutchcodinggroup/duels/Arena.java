@@ -19,7 +19,7 @@ import nl.dutchcodinggroup.duels.utils.GameState;
 public class Arena {
 	
 	private String name;
-	private static GameState state;
+	private GameState state;
 	private Location loc1;
 	private Location loc2;
 	private boolean spawnedLoc1;
@@ -33,7 +33,7 @@ public class Arena {
 		this.loc2 = loc2;
 		this.enabled = enabled;
 		
-		this.state = GameState.WAITING;
+		state = GameState.WAITING;
 	}
 	
 	public static void sendMessage(String message) {
